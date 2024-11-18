@@ -11,24 +11,37 @@
             height: auto;  /* Tinggi otomatis agar proporsional */
             object-fit: cover; /* Agar gambar tidak terdistorsi */
         }
-        /* Style untuk Sidebar */
         #sidebar {
-            height: 100vh;
-            width: 250px;
-            background-color: #6482AD;
-            padding-top: 20px;
-            position: fixed;
-        }
+      height: 100vh;
+      width: 250px;
+      background-color: #2c3e50;
+      padding-top: 20px;
+      position: fixed;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan */
+      border-right: 1px solid #d3d3d3;
+      transition: width 0.3s;
+    }
 
-        #sidebar .nav-link {
-            color: #ffffff;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
+    #sidebar .nav-link {
+      color: #ffffff;
+      font-size: 1.1rem;
+      padding: 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
 
-        #sidebar .nav-link:hover {
-        background-color: #7FA1C3;
-        }
+    #sidebar .nav-link i {
+      margin-right: 12px;
+    }
+
+    #sidebar .nav-link:hover {
+      background-color: #34495e;
+      color: #e9ecef;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Efek shadow pada hover */
+    }
 
         #content {
             margin-left: 250px;
@@ -37,16 +50,28 @@
     </style>
 </head>
 <body>
-        <!-- Sidebar -->
-        <div id="sidebar">
-        <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard">Dashboard</a>
-        <a class="nav-link" href="/">Beranda</a>
-        <a class="nav-link" href="products">Produk</a> <!-- Link ke halaman produk -->
-        <a class="nav-link" href="transactions">Transaksi</a>
-        <a class="nav-link" href="logouts">Logout</a>
-        </nav>
-        </div>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <nav class="nav flex-column">
+        <a class="nav-link" href="dashboard">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a class="nav-link" href="/">
+          <i class="fas fa-home"></i> Beranda
+        </a>
+        <a class="nav-link" href="products">
+          <i class="fas fa-box"></i> Produk
+        </a>
+        <a class="nav-link" href="transactions">
+          <i class="fas fa-money-check-alt"></i> Transaksi
+        </a>
+        <a class="nav-link" href="logouts">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </nav>
+    </div>
 
         <!-- Content -->
         <div id="content" class="w-100">

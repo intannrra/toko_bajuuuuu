@@ -1,66 +1,109 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Produk</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-  <title>Edit Produk</title>
   <style>
     body {
       background-color: #f8f9fa;
     }
+
     .card {
       margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
     }
+    .card:hover {
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
     .product-image {
       max-width: 100px;
       max-height: 100px;
+      border-radius: 8px;
     }
-    .form-control:invalid {
-      border-color: #dc3545;
-    }
-    .form-control:valid {
-      border-color: #28a745;
-    }
-    /* Style untuk Sidebar */
+
     #sidebar {
       height: 100vh;
       width: 250px;
-      background-color: #6482AD;
+      background-color: #2c3e50;
       padding-top: 20px;
       position: fixed;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan */
+      border-right: 1px solid #d3d3d3;
+      transition: width 0.3s;
     }
 
     #sidebar .nav-link {
       color: #ffffff;
       font-size: 1.1rem;
-      margin-bottom: 15px;
+      padding: 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    #sidebar .nav-link i {
+      margin-right: 12px;
     }
 
     #sidebar .nav-link:hover {
-      background-color: #7FA1C3;
+      background-color: #34495e;
+      color: #e9ecef;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Efek shadow pada hover */
     }
 
     #content {
       margin-left: 250px;
       padding: 20px;
     }
+
+    .btn-primary, .btn-secondary {
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+      background-color: #7FA1C3;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      color: #fff;
+      background-color: #6c757d;
+      border-color: #6c757d;
+    }
   </style>
 </head>
 <body>
-  <div class="d-flex">
-   <!-- Sidebar -->
-   <div id="sidebar">
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div id="sidebar">
       <nav class="nav flex-column">
-      <a class="nav-link" href="dashboard">Dashboard</a>
-      <a class="nav-link" href="/">Beranda</a>
-        <a class="nav-link" href="products">Produk</a> <!-- Link ke halaman produk -->
-        <a class="nav-link" href="transactions">Transaksi</a>
-        <a class="nav-link" href="logouts">Logout</a>
+        <a class="nav-link" href="dashboard">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a class="nav-link" href="/">
+          <i class="fas fa-home"></i> Beranda
+        </a>
+        <a class="nav-link" href="products">
+          <i class="fas fa-box"></i> Produk
+        </a>
+        <a class="nav-link" href="transactions">
+          <i class="fas fa-money-check-alt"></i> Transaksi
+        </a>
+        <a class="nav-link" href="logouts">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
       </nav>
     </div>
 
@@ -69,7 +112,7 @@
       <div class="container mt-5">
         <div class="row justify-content-center">
           <div class="col-lg-6">
-            <div class="card shadow">
+            <div class="card shadow-lg">
               <div class="card-body">
                 <h4 class="card-title text-center">Edit Produk</h4>
 
@@ -86,14 +129,13 @@
 
                 <!-- Form untuk mengedit produk -->
                 <form action="{{ route('products.update', $product->id) }}" method="post" enctype="multipart/form-data" novalidate>
-                  @csrf  <!-- Token CSRF wajib untuk keamanan Laravel -->
-                  @method('PUT') <!-- Method PUT untuk update -->
+                  @csrf
+                  @method('PUT')
 
                   <!-- Input gambar -->
                   <div class="mb-3">
                     <label for="image" class="form-label">Upload Gambar Baru</label>
                     <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                    <div class="invalid-feedback">Harap unggah gambar produk.</div>
                   </div>
 
                   <!-- Tampilkan gambar lama jika ada -->
@@ -108,35 +150,30 @@
                   <div class="form-floating mb-3">
                     <input type="text" class="form-control" name="title" id="floatingNamaBarang" placeholder="Nama Barang" value="{{ old('title', $product->title) }}" required>
                     <label for="floatingNamaBarang">Nama Barang</label>
-                    <div class="invalid-feedback">Nama barang wajib diisi.</div>
                   </div>
 
                   <!-- Input ukuran -->
                   <div class="form-floating mb-3">
                     <input type="text" class="form-control" name="size" id="floatingUkuran" placeholder="Ukuran" value="{{ old('size', $product->size) }}" required>
                     <label for="floatingUkuran">Ukuran</label>
-                    <div class="invalid-feedback">Ukuran wajib diisi.</div>
                   </div>
 
                   <!-- Input harga -->
                   <div class="form-floating mb-3">
                     <input type="number" class="form-control" name="price" id="floatingHarga" placeholder="Harga" value="{{ old('price', $product->price) }}" required>
                     <label for="floatingHarga">Harga (Rp)</label>
-                    <div class="invalid-feedback">Harga wajib diisi.</div>
                   </div>
 
                   <!-- Input stok -->
                   <div class="form-floating mb-3">
                     <input type="number" class="form-control" name="stock" id="floatingStok" placeholder="Stok" value="{{ old('stock', $product->stock) }}" required>
                     <label for="floatingStok">Stok</label>
-                    <div class="invalid-feedback">Stok wajib diisi.</div>
                   </div>
 
                   <!-- Input deskripsi -->
                   <div class="form-floating mb-3">
                     <textarea class="form-control" name="description" id="floatingTextarea" placeholder="Deskripsi Produk" required>{{ old('description', $product->description) }}</textarea>
                     <label for="floatingTextarea">Deskripsi Produk</label>
-                    <div class="invalid-feedback">Deskripsi wajib diisi.</div>
                   </div>
 
                   <!-- Tombol submit dan batal -->
@@ -159,22 +196,19 @@
 
   <!-- JavaScript for form validation -->
   <script>
-    // Disable form submission if there are invalid fields
     (function () {
       'use strict';
       var forms = document.querySelectorAll('form');
 
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-          }, false);
-        });
+      Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
     })();
   </script>
 </body>
