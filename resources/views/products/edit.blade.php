@@ -29,13 +29,14 @@
       border-radius: 8px;
     }
 
+    /* Style untuk Sidebar */
     #sidebar {
       height: 100vh;
       width: 250px;
       background-color: #2c3e50;
       padding-top: 20px;
       position: fixed;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan */
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
       border-right: 1px solid #d3d3d3;
       transition: width 0.3s;
     }
@@ -58,29 +59,14 @@
     #sidebar .nav-link:hover {
       background-color: #34495e;
       color: #e9ecef;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Efek shadow pada hover */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     #content {
       margin-left: 250px;
-      padding: 20px;
-    }
-
-    .btn-primary, .btn-secondary {
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .btn-primary:hover, .btn-secondary:hover {
-      background-color: #7FA1C3;
-      transform: scale(1.05);
-    }
-
-    .btn-secondary {
-      color: #fff;
-      background-color: #6c757d;
-      border-color: #6c757d;
+      padding: 30px;
+      background-color: #f8f9fa;
+      min-height: 100vh;
     }
   </style>
 </head>

@@ -1,34 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tambah Produk</title>
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-  <title>Tambah Produk</title>
   <style>
     body {
       background-color: #f8f9fa;
     }
+
     .card {
       margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
     }
-    .form-control:invalid {
-      border-color: #dc3545;
+    .card:hover {
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
     }
-    .form-control:valid {
-      border-color: #28a745;
-    }
+
+    /* Style untuk Sidebar */
     #sidebar {
       height: 100vh;
       width: 250px;
       background-color: #2c3e50;
       padding-top: 20px;
       position: fixed;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan */
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
       border-right: 1px solid #d3d3d3;
       transition: width 0.3s;
     }
@@ -51,12 +53,14 @@
     #sidebar .nav-link:hover {
       background-color: #34495e;
       color: #e9ecef;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Efek shadow pada hover */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     #content {
       margin-left: 250px;
-      padding: 20px;
+      padding: 30px;
+      background-color: #f8f9fa;
+      min-height: 100vh;
     }
   </style>
 </head>
@@ -71,7 +75,9 @@
         <a class="nav-link" href="/">
           <i class="fas fa-home"></i> Beranda
         </a>
-        <a class="nav-link" href="products"><i class="fas fa-box"></i> Produk</a>
+        <a class="nav-link" href="products">
+          <i class="fas fa-box"></i> Produk
+        </a>
         <a class="nav-link" href="transactions">
           <i class="fas fa-money-check-alt"></i> Transaksi
         </a>
@@ -86,7 +92,7 @@
       <div class="container mt-5">
         <div class="row justify-content-center">
           <div class="col-lg-6">
-            <div class="card shadow">
+            <div class="card shadow-lg">
               <div class="card-body">
                 <h4 class="card-title text-center">Tambah Produk</h4>
 
@@ -103,7 +109,7 @@
 
                 <!-- Form untuk menambah produk -->
                 <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data" novalidate>
-                @csrf  <!-- Token CSRF wajib untuk keamanan Laravel -->
+                  @csrf
 
                   <!-- Input gambar -->
                   <div class="mb-3">
@@ -167,22 +173,19 @@
 
   <!-- JavaScript for form validation -->
   <script>
-    // Disable form submission if there are invalid fields
     (function () {
       'use strict';
       var forms = document.querySelectorAll('form');
 
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault();
-              event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-          }, false);
-        });
+      Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
     })();
   </script>
 </body>

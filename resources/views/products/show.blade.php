@@ -1,98 +1,122 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Produk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .product-image {
-            width: 150px;  /* Ubah lebar gambar sesuai kebutuhan */
-            height: auto;  /* Tinggi otomatis agar proporsional */
-            object-fit: cover; /* Agar gambar tidak terdistorsi */
-        }
+        /* Sidebar styles */
         #sidebar {
-      height: 100vh;
-      width: 250px;
-      background-color: #2c3e50;
-      padding-top: 20px;
-      position: fixed;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15); /* Tambahkan bayangan */
-      border-right: 1px solid #d3d3d3;
-      transition: width 0.3s;
-    }
+            height: 100vh;
+            width: 250px;
+            background-color: #2c3e50;
+            padding-top: 20px;
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+            border-right: 1px solid #d3d3d3;
+            transition: width 0.3s;
+        }
 
-    #sidebar .nav-link {
-      color: #ffffff;
-      font-size: 1.1rem;
-      padding: 12px 20px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-    }
+        #sidebar .nav-link {
+            color: #ffffff;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
 
-    #sidebar .nav-link i {
-      margin-right: 12px;
-    }
+        #sidebar .nav-link i {
+            margin-right: 12px;
+        }
 
-    #sidebar .nav-link:hover {
-      background-color: #34495e;
-      color: #e9ecef;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Efek shadow pada hover */
-    }
+        #sidebar .nav-link:hover {
+            background-color: #34495e;
+            color: #e9ecef;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
 
         #content {
             margin-left: 250px;
             padding: 20px;
         }
+
+        .product-image {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-body {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-
-<div class="d-flex">
-    <!-- Sidebar -->
-    <div id="sidebar">
-      <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard">
-          <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-        <a class="nav-link" href="/">
-          <i class="fas fa-home"></i> Beranda
-        </a>
-        <a class="nav-link" href="products">
-          <i class="fas fa-box"></i> Produk
-        </a>
-        <a class="nav-link" href="transactions">
-          <i class="fas fa-money-check-alt"></i> Transaksi
-        </a>
-        <a class="nav-link" href="logouts">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-      </nav>
-    </div>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a class="nav-link" href="/">
+                    <i class="fas fa-home"></i> Beranda
+                </a>
+                <a class="nav-link" href="products">
+                    <i class="fas fa-box"></i> Produk
+                </a>
+                <a class="nav-link" href="transactions">
+                    <i class="fas fa-money-check-alt"></i> Transaksi
+                </a>
+                <a class="nav-link" href="logouts">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
 
         <!-- Content -->
         <div id="content" class="w-100">
             <div class="container mt-3">
                 <h4 class="text-center mt-3">Detail Produk</h4>
-                <div class="card">
-                    <img src="{{ asset('storage/products/'.$product->image) }}" alt="Gambar Produk" class="product-image">
+                <div class="card mx-auto" style="max-width: 400px;">
+                    <img src="{{ asset('storage/products/'.$product->image) }}" alt="Gambar Produk" class="product-image mx-auto mt-3">
                     <div class="card-body">
                         <h5 class="card-title">{{ $product->title }}</h5>
                         <p class="card-text">Ukuran: {{ $product->size }}</p>
                         <p class="card-text">Deskripsi: {{ $product->description }}</p>
-                        <p class="card-text">Harga: Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                        <p class="card-text">Stok: {{ $product->stock }}</p>
-                        <p class="card-text">Id: {{ $product->id }}</p>
-                        <a href="{{ route('products.index') }}" class="btn btn-primary">Kembali</a>
+                        <p class="card-text text-success fw-bold">Harga: Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Hapus
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
 </html>
