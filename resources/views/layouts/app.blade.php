@@ -55,36 +55,35 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#">Toko Hj. Mariam</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link" href="pesanans">Produk</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #5A9EC1;">
+    <a class="navbar-brand text-white font-weight-bold" href="#">Toko Hj. Mariam</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/">Beranda</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Produk</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="#">Pesanan</a></li>
 
-                @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('auth.login') }}">Log In</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('auth.register') }}">Register</a></li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                           Logout
-                        </a>
-                    </li>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @endguest
-            </ul>
-        </div>
-    </nav>
-
+            @guest
+                <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="{{ route('auth.login') }}">Log In</a></li>
+                <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="{{ route('auth.register') }}">Register</a></li>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link text-white font-weight-bold" href="#"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        Logout
+                    </a>
+                </li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            @endguest
+        </ul>
+    </div>
+</nav>
     <!-- Content Section -->
     <main>
         @yield('content')
