@@ -56,7 +56,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #5A9EC1;">
-    <a class="navbar-brand text-white font-weight-bold" href="#">Toko Hj. Mariam</a>
+    <a class="navbar-brand text-white font-weight-bold" href="/">Toko Hj. Mariam</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -65,7 +65,7 @@
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="dashboard">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/">Beranda</a></li>
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Produk</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="#">Pesanan</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesananns">Pesanan</a></li>
 
             @guest
                 <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="{{ route('auth.login') }}">Log In</a></li>
