@@ -27,7 +27,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 // Route untuk resource controllers
 Route::resource('products', ProductController::class);
 Route::resource('pesanans', PesananController::class);
-Route::resource('trans', TransController::class);
+Route::resource('trans', TransactionController::class);
 
 // Route untuk halaman checkout
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout

@@ -36,7 +36,7 @@
   /* Style untuk tombol "Belanja Sekarang" */
   .btn-shop-now {
     background-color: #ff6b6b;
-    color: #fff5e1; 
+    color: #fff5e1;
     padding: 12px 30px;
     font-weight: bold;
     border-radius: 30px;

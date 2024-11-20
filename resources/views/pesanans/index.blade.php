@@ -16,10 +16,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-    <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-    <li class="nav-item"><a class="nav-link" href="pesanans">Produk</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Tentang Kami</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="pesanans">Produk</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
 
     @guest
         <li class="nav-item"><a class="nav-link" href="{{ route('auth.login') }}">Log In</a></li>

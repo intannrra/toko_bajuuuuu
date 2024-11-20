@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Pesanan</title>
+    <title>Daftar Transaksi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Style untuk Sidebar */
@@ -66,7 +66,7 @@
 
         <!-- Konten Utama -->
         <div id="content" class="container mt-5">
-            <h2>Daftar Pesanan</h2>
+            <h2>Daftar Transaksi</h2>
 
             @if(session('success'))
                 <div class="alert alert-success mt-3">{{ session('success') }}</div>
