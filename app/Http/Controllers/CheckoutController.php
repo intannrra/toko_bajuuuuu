@@ -38,7 +38,8 @@ class CheckoutController extends Controller
     {
         $data = session('data');
         if ($data === null) {
-            return redirect()->route('trans.checkout')->withErrors('No data found');
+            return redirect()->route('checkout')->withErrors('No data found');
+
         }
         return view('transactions.index', compact('data'));
     }
