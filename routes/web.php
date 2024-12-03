@@ -34,6 +34,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 // Route untuk halaman checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
+Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('trans.checkout');
+Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm']);
 Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
