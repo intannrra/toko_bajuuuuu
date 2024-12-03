@@ -7,7 +7,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #fdfde3; /* Latar belakang kuning lembut sesuai gambar */
+            background-color: #fdfde3; /* Latar belakang kuning lembut */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,13 +25,27 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
         .btn-primary {
             width: 100%;
-            background-color: #28a745; /* Hijau sesuai dengan tombol login pada gambar */
+            background-color: #28a745; /* Hijau */
             border: none;
             padding: 10px;
             color: white;
             border-radius: 5px;
+            cursor: pointer;
         }
         .btn-primary:hover {
             background-color: #218838;
@@ -40,7 +54,8 @@
             text-align: center;
         }
         a {
-            color: #007bff; /* Warna biru untuk link */
+            color: #007bff; /* Biru */
+            text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
@@ -50,7 +65,7 @@
 <body>
     <div class="form-container">
         <h2>Register</h2>
-        <form action="{{ route('auth.register') }}" method="POST"> <!-- Ganti dengan 'auth.register.submit' -->
+        <form action="{{ route('auth.register.process') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="name">Nama:</label>
@@ -68,16 +83,16 @@
                 <label for="password_confirmation">Konfirmasi Password:</label>
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
             </div>
-            <div> 
-                <label for:"role">Role:</label>
-                <select name="role" id="role" required> 
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select name="role" id="role" required>
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Daftar</button>
         </form>
-        <p>Sudah punya akun? <a href="{{ route('auth.login') }}">Login di sini</a></p>        
+        <p>Sudah punya akun? <a href="{{ route('auth.login') }}">Login di sini</a></p>
     </div>
 </body>
 </html>

@@ -23,6 +23,6 @@ class RoleMiddleware
             return $next($request);
         }
 
-        return response()->json(['message' => 'Role Tidak Dikenali'], 403);
+        return response()->json(['Message' => 'Role Tidak Ditemukan'], 403);
     }
-}
+};

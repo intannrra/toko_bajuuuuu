@@ -89,7 +89,7 @@
            </div>
        @endif
 <!-- Form login -->
-        <form action="{{ route('auth.login') }}" method="POST"> <!-- Ganti dengan 'auth.login.submit' -->
+        <form action="{{ route('auth.login') }}" method="POST"> 
             @csrf
             <div class="form-group">
                 <label for="email">Email:</label>
