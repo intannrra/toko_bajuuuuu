@@ -99,15 +99,7 @@
                         <p class="card-text">Ukuran: {{ $product->size }}</p>
                         <p class="card-text">Deskripsi: {{ $product->description }}</p>
                         <p class="card-text text-success fw-bold">Harga: Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                        <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i> Hapus
-                            </button>
+                            <a href="{{ route('products.index') }}" class="btn btn-secondary">Kembali</a>
                         </form>
                     </div>
                 </div>

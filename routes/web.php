@@ -14,7 +14,7 @@ use App\Http\Controllers\{
 };
 
 // Route untuk halaman home
-Route::get('/home', [HomeController::class, 'index'])->name('homes.home');
+Route::get('/', [HomeController::class, 'index'])->name('homes.home');
 
 // Route untuk autentikasi
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
