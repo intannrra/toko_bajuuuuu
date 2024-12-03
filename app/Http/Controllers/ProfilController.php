@@ -30,8 +30,8 @@ class ProfilController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'phone_number' => 'nullable|string|max:15', // Validasi nomor handphone
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi foto profil
+            'phone_number' => 'nullable|string|max:15',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $user = new User();
@@ -55,14 +55,14 @@ class ProfilController extends Controller
     // Menampilkan form untuk mengedit profil pengguna (Edit)
     public function edit($id)
     {
-        $user = User::findOrFail($id); // Ambil data pengguna berdasarkan ID
+        $user = User::findOrFail($id);
 
         // Cek jika pengguna yang sedang login adalah pengguna yang sedang diedit
-        if (Auth::id() !== $user->id) {
+        if (Auth::id() !== $user->id && Auth::user()->role_id !== 1) { // role_id 1 untuk admin
             return redirect()->route('profil.index')->with('error', 'Anda tidak dapat mengedit profil pengguna lain!');
         }
 
-        return view('profil.edit', compact('user')); // Kirim data pengguna ke view 'profil.edit'
+        return view('profil.edit', compact('user'));
     }
 
     // Memperbarui profil pengguna
@@ -71,17 +71,17 @@ class ProfilController extends Controller
         $user = User::findOrFail($id);
 
         // Cek jika pengguna yang sedang login adalah pengguna yang sedang diperbarui
-        if (Auth::id() !== $user->id) {
+        if (Auth::id() !== $user->id && Auth::user()->role_id !== 1) { // role_id 1 untuk admin
             return redirect()->route('profil.index')->with('error', 'Anda tidak dapat memperbarui profil pengguna lain!');
         }
 
-        // Validasi data yang diterima
+        // Validasi dan proses pembaruan data...
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8|confirmed',
-            'phone_number' => 'nullable|string|max:15', // Validasi nomor handphone
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi foto profil
+            'phone_number' => 'nullable|string|max:15',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Update nama dan email
@@ -118,7 +118,7 @@ class ProfilController extends Controller
         $user = User::findOrFail($id);
 
         // Cek jika pengguna yang sedang login adalah pengguna yang akan dihapus
-        if (Auth::id() !== $user->id) {
+        if (Auth::id() !== $user->id && Auth::user()->role_id !== 1) { // role_id 1 untuk admin
             return redirect()->route('profil.index')->with('error', 'Anda tidak dapat menghapus pengguna lain!');
         }
 

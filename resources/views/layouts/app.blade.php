@@ -63,19 +63,20 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="dashboard">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/">Beranda</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/home">Beranda</a></li>
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Produk</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesananns">Pesanan</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Pesanan</a></li>
 
             @guest
                 <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="{{ route('auth.login') }}">Log In</a></li>
                 <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="{{ route('auth.register') }}">Register</a></li>
             @else
-                <li class="nav-item">
-                    <a class="nav-link text-white font-weight-bold" href="#"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('profil.show', Auth::id()) }}">Profile</a></li>
+            <li class="nav-item">
+                <a class="nav-link text-white font-weight-bold" href="#"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                 </li>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf

@@ -37,6 +37,12 @@
             <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}">
         </div>
 
+        {{-- Alamat Rumah --}}
+        <div class="form-group">
+            <label for="address">Alamat Rumah</label>
+            <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $user->address) }}">
+        </div>
+
         {{-- Foto Profil --}}
         <div class="form-group">
             <label for="profile_picture">Foto Profil</label>
