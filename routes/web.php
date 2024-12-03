@@ -32,11 +32,14 @@ Route::resource('trans', TransactionController::class);
 // Route untuk halaman checkout
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
 Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('trans.checkout');
+Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm']);
 
 // Route untuk halaman dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::post('/checkout', [TransactionController::class, 'processCheckout'])->name('checkout.process');
+Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
