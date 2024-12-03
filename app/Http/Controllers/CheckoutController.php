@@ -1,66 +1,46 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Transaction;
-use Illuminate\Support\Facades\Storage;
 
 class CheckoutController extends Controller
 {
-    // Method untuk menampilkan form checkout
+    // Menampilkan form checkout
     public function showCheckoutForm()
     {
-        return view('trans.checkout'); // Pastikan nama view sesuai dengan struktur folder Anda
+        return view('trans.checkout');  // Pastikan Anda punya view 'checkout.form'
     }
 
-    // Method untuk memproses checkout
+    // Fungsi untuk memproses data form
     public function process(Request $request)
     {
-        // Validasi form
-        $request->validate([
-            'address' => 'required|string|max:255',
+        // Validasi input form
+        $validated = $request->validate([
+            'address' => 'required|string',
             'shipping_service' => 'required|string',
             'payment_method' => 'required|string',
-            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
+            'payment_proof' => 'nullable|file|mimes:jpg,png,jpeg,pdf',
         ]);
 
-        // Simpan file bukti pembayaran jika bukan Midtrans
-        $filename = null;
-        if ($request->hasFile('payment_proof') && $request->payment_method !== 'midtrans') {
-            $file = $request->file('payment_proof');
-            $filename = $file->hashName();
-            $file->storeAs('public/payment_proofs', $filename);
+        // Menyimpan bukti pembayaran jika ada file yang di-upload
+        if ($request->hasFile('payment_proof')) {
+            // Menyimpan file ke storage dan mendapatkan path
+            $paymentProofPath = $request->file('payment_proof')->store('payment_proofs', 'public');
+            $validated['payment_proof'] = $paymentProofPath;
         }
 
-        // Simpan data transaksi ke dalam tabel `transactions`
-        $transaction = new Transaction();
-        $transaction->user_id = auth()->id(); // Id user yang melakukan checkout
-        $transaction->address = $request->address;
-        $transaction->shipping_service = $request->shipping_service;
-        $transaction->payment_method = $request->payment_method;
-        $transaction->payment_proof = $filename; // Nama file bukti pembayaran
-        $transaction->status = 'pending'; // Status awal transaksi
-        $transaction->total_price = $request->total_price; // Pastikan `total_price` tersedia di request
-
-        $transaction->save(); // Simpan transaksi
-
-        // Proses Midtrans jika metode pembayaran menggunakan Midtrans
-        if ($request->payment_method === 'midtrans') {
-            return $this->processMidtransPayment($transaction);
-        }
-
-        return redirect()->route('pesanans.index')->with('success', 'Checkout berhasil, bukti pembayaran berhasil diunggah!');
+        // Arahkan ke halaman success dan kirim data yang sudah divalidasi
+        return redirect()->route('checkout.success')->with('data', $validated);
     }
 
-    // Method untuk memproses pembayaran Midtrans
-    public function processMidtransPayment($transaction)
+    // Fungsi untuk menampilkan halaman sukses setelah checkout
+    public function success()
     {
-        // Contoh proses Midtrans API
-        // Setelah mendapatkan `snapToken`, simpan token ke dalam database atau lakukan pengaturan yang diperlukan
-        $transaction->status = 'completed'; // Ubah status transaksi jika pembayaran berhasil
-        $transaction->save();
+        $data = session('data');
+        if ($data === null) {
+            return redirect()->route('checkout')->withErrors('No data found');
 
-        return redirect()->route('pesanans.index')->with('success', 'Pembayaran Midtrans berhasil!');
+        }
+        return view('transactions.index', compact('data'));
     }
 }

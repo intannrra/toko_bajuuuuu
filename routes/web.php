@@ -15,7 +15,7 @@ use App\Http\Controllers\{
 use App\Http\Middleware\RoleMiddleware;
 
 // Route untuk halaman home
-Route::get('/home', [HomeController::class, 'index'])->name('homes.home');
+Route::get('/', [HomeController::class, 'index'])->name('homes.home');
 
 // Route untuk autentikasi
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
@@ -29,13 +29,17 @@ Route::resource('/products', ProductController::class);
 Route::resource('/pesanans', PesananController::class);
 Route::resource('/trans', TransactionController::class);
 
+// Route untuk halaman dashboard
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 // Route untuk halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
 Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('trans.checkout');
+Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm']);
+Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
-// Route untuk halaman dashboard
-//Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::post('/checkout', [TransactionController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 
