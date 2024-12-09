@@ -8,7 +8,7 @@ use App\Models\Transaction;
 class TransactionController extends Controller
 {
     // Proses penyimpanan checkout
-    public function processCheckout(Request $request)
+    public function Checkout(Request $request)
     {
         $totalPrice = 0;
 
