@@ -7,54 +7,74 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         body {
-            background-color: #fdfde3; /* Latar belakang kuning lembut */
+            background-color: #f4f4f9; /* Latar belakang abu-abu terang */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            font-family: 'Arial', sans-serif;
         }
         .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
         }
         .form-container h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .form-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
             display: block;
-            margin-bottom: 5px;
+            font-size: 14px;
+            color: #555;
         }
         .form-group input, .form-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #007bff;
+            outline: none;
         }
         .btn-primary {
             width: 100%;
-            background-color: #28a745; /* Hijau */
+            background-color: #007bff;
             border: none;
-            padding: 10px;
+            padding: 12px;
             color: white;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .btn-primary:hover {
-            background-color: #218838;
+            background-color: #0056b3;
+            transform: translateY(-2px);
         }
         p {
             text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
         }
         a {
-            color: #007bff; /* Biru */
+            color: #007bff;
             text-decoration: none;
         }
         a:hover {
@@ -69,19 +89,19 @@
             @csrf
             <div class="form-group">
                 <label for="name">Nama:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama Anda" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
             </div>
             <div class="form-group">
                 <label for="password_confirmation">Konfirmasi Password:</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password" required>
             </div>
             <div class="form-group">
                 <label for="role">Role:</label>

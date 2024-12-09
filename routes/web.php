@@ -42,6 +42,10 @@ Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('c
 
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+Route::get('/checkout', [TransactionController::class, 'checkout'])->name('trans.checkout');
+Route::post('/checkout', [TransactionController::class, 'processCheckout']);
+Route::post('/checkout', [TransactionController::class, 'Checkout']);
+
 
 // Route untuk Profil dengan middleware autentikasi
 //Route::middleware('auth')->group(function () {
