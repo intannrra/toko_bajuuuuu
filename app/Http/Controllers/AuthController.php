@@ -49,9 +49,11 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'string', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised()],
-            'role' => ['required', 'string', 'in:admin,user'], // Validasi role
+            'password' => 'required|string|min:3', // Ganti dengan aturan password sesuai keinginan
+            'password_confirmation' => 'required|same:password',
+            'role' => 'required|string|in:admin,user',
         ]);
+
 
         // Cek apakah email sudah terdaftar
         $existingUser = User::where('email', $request->email)->first();
