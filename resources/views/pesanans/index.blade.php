@@ -107,7 +107,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/home">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link" href="pesanans">Produk</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
 
@@ -125,6 +125,19 @@
                         @csrf
                     </form>
                 @endguest
+
+                <!-- Cart Icon with Badge -->
+                <li class="nav-item dropdown ml-3">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarCart" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge badge-light" id="cart-count">0</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarCart">
+                        <div id="cart-items-dropdown"></div>
+                        <div class="dropdown-divider"></div>
+                        <button class="btn btn-success btn-block" onclick="checkout()">Checkout</button>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -140,9 +153,14 @@
                             <img src="{{ asset('storage/products/'.$product->image) }}" class="img-fluid" alt="{{ $product->title }}">
                             <h5 class="mt-2">{{ $product->title }}</h5>
                             <p class="text-muted">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <button class="btn btn-dark" onclick="addToCart({{ $product->id }}, '{{ $product->title }}', '{{ $product->price }}')">
-                                <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-                            </button>
+                            <form action="{{ route('cart.add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="btn btn-dark">
+                                    <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @empty
@@ -151,17 +169,6 @@
                     </div>
                 @endforelse
             </div>
-
-            <!-- Keranjang Belanja -->
-            <h3>Keranjang Belanja</h3>
-            <div class="cart-container">
-                <div id="cart-items"></div>
-                <div class="text-end mt-3">
-                    <strong>Total: Rp <span id="total-price">0</span></strong>
-                </div>
-                <button class="btn btn-success mt-3" onclick="checkout()">Checkout</button>
-            </div>
-        </div>
     </main>
 
     <!-- Footer -->
@@ -186,8 +193,11 @@
 
         function renderCart() {
             const cartItemsContainer = document.getElementById('cart-items');
+            const cartItemsDropdown = document.getElementById('cart-items-dropdown');
             const totalPriceContainer = document.getElementById('total-price');
+            const cartCountContainer = document.getElementById('cart-count');
             cartItemsContainer.innerHTML = '';
+            cartItemsDropdown.innerHTML = '';
             let totalPrice = 0;
 
             cart.forEach(item => {
@@ -199,9 +209,17 @@
                         <button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">Hapus</button>
                     </div>
                 `;
+
+                cartItemsDropdown.innerHTML += `
+                    <div class="dropdown-item">
+                        <span class="item-info">${item.title} - Rp ${item.price.toLocaleString()}</span>
+                        <button class="btn btn-danger btn-sm float-right" onclick="removeFromCart(${item.id})">Hapus</button>
+                    </div>
+                `;
             });
 
             totalPriceContainer.textContent = totalPrice.toLocaleString();
+            cartCountContainer.textContent = cart.length;
         }
 
         function removeFromCart(id) {

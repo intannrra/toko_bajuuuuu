@@ -57,3 +57,11 @@ Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update
 Route::post('/checkout', [TransactionController::class, 'checkout'])->name('cart.checkout');
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
+// Route untuk halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('trans.checkout');
+Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+
+// Route untuk transaksi
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.index');
