@@ -73,7 +73,7 @@
                 <a class="nav-link" href="dashboard">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="/home">
                     <i class="fas fa-home"></i> Beranda
                 </a>
                 <a class="nav-link" href="products">
