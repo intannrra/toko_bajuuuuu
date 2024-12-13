@@ -12,17 +12,19 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @param  mixed  ...$roles
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (Auth::check() && in_array(Auth::user()->role, $roles)) {
+        if (Auth::check() && in_array(Auth::user()->role, $roles)){
             return $next($request);
         }
+        else{
+            if (!Auth::check()){
 
-        return response()->json(['Message' => 'Role Tidak Ditemukan'], 403);
+                return redirect()->route('login');
+            }
+            return redirect()->back()->with('error','Anda Tidak Memiliki Akses');
+        }
     }
-};
+}

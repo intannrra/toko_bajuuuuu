@@ -117,40 +117,37 @@
 </head>
 <body>
     <div class="container">
-        <h2>Login</h2>
+           <!-- Menampilkan pesan flash jika ada -->
+           @if(session('success'))
+           <div class="alert alert-success">
+               {{ session('success') }}
+           </div>
+       @endif
 
-        <!-- Menampilkan pesan flash jika ada -->
-        @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-        @endif
-
-        @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-
-        <!-- Form login -->
-        <form action="{{ route('auth.login') }}" method="POST">
+       @if($errors->any())
+           <div class="alert alert-danger">
+               <ul>
+                   @foreach($errors->all() as $error)
+                       <li>{{ $error }}</li>
+                   @endforeach
+               </ul>
+           </div>
+       @endif
+<!-- Form login -->
+        <form action="{{ route('auth.login') }}" method="POST"> 
             @csrf
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" required>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password Anda" required>
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-
-        <p>Belum punya akun? <a href="{{ route('auth.register') }}">Daftar di sini</a></p>
+        
+        <p>Belum punya akun? <a href="{{ route('auth.register') }}">Daftar di sini</a></p>          
     </div>
 </body>
 </html>

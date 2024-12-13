@@ -49,11 +49,9 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:3', // Ganti dengan aturan password sesuai keinginan
-            'password_confirmation' => 'required|same:password',
-            'role' => 'required|string|in:admin,user',
+            'password' => ['required', 'string', Password::min(8)],
+            'role' => ['required', 'string', 'in:admin,user'], // Validasi role
         ]);
-
 
         // Cek apakah email sudah terdaftar
         $existingUser = User::where('email', $request->email)->first();
@@ -85,4 +83,4 @@ class AuthController extends Controller
 
         return redirect()->route('auth.login')->with('success', 'Anda telah keluar.');
     }
-};
+}

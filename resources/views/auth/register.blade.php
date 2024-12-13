@@ -92,7 +92,13 @@
     <div class="form-container">
         <h2>Register</h2>
 
-        {{-- Menampilkan pesan error jika ada --}}
+        <!-- Menampilkan pesan sukses atau error -->
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -107,22 +113,19 @@
             @csrf
             <div class="form-group">
                 <label for="name">Nama:</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama Anda" value="{{ old('name') }}" required>
-                @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" value="{{ old('email') }}" required>
-                @error('email') <div class="text-danger">{{ $message }}</div> @enderror
+                <input type="email" class="form-control" id="email" name="email" required value="{{ old('email') }}">
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
-                @error('password') <div class="text-danger">{{ $message }}</div> @enderror
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <div class="form-group">
                 <label for="password_confirmation">Konfirmasi Password:</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password" required>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
             </div>
             <div class="form-group">
                 <label for="role">Role:</label>
@@ -130,11 +133,9 @@
                     <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>
-                @error('role') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
             <button type="submit" class="btn btn-primary">Daftar</button>
         </form>
-
         <p>Sudah punya akun? <a href="{{ route('auth.login') }}">Login di sini</a></p>
     </div>
 </body>
