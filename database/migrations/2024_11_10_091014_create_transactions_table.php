@@ -1,27 +1,72 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-class CreateTransactionsTable extends Migration
+use Illuminate\Http\Request;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use App\Models\Product;
+use Carbon\Carbon;
+
+class TransactionController extends Controller
 {
-    public function up()
+    /**
+     * Halaman Checkout
+     */
+    public function checkout(Request $request)
     {
-        Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('address');
-            $table->string('shipping_service');
-            $table->string('payment_method');
-            $table->string('payment_proof')->nullable();
-            $table->string('status')->default('pending'); // Default status
-            $table->timestamps();
-        });
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return response()->json(['success' => false, 'message' => 'Keranjang kosong.']);
+        }
+
+        // Simpan Transaksi
+        $transaction = Transaction::create([
+            'transaction_code' => 'TRX' . time(),
+            'transaction_date' => Carbon::now(),
+            'total_price' => array_sum(array_map(function ($item) {
+                return $item['price'] * $item['quantity'];
+            }, $cart)),
+            'address' => $request->address,
+            'shipping' => $request->shipping,
+            'payment' => $request->payment,
+        ]);
+
+        // Simpan Detail Transaksi
+        foreach ($cart as $productId => $item) {
+            TransactionDetail::create([
+                'transaction_id' => $transaction->id,
+                'product_id' => $productId,
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+
+            // Kurangi stok produk
+            $product = Product::find($productId);
+            if ($product) {
+                $product->stock -= $item['quantity'];
+                $product->save();
+            }
+        }
+
+        // Hapus keranjang dari session
+        session()->forget('cart');
+
+        return response()->json([
+            'success' => true,
+            'redirect' => route('transactions.index'),
+        ]);
     }
 
-    public function down()
+    /**
+     * Halaman Riwayat Transaksi
+     */
+    public function index()
     {
-        Schema::dropIfExists('transactions');
+        $transactions = Transaction::with('details.product')->orderBy('transaction_date', 'desc')->get();
+
+        return view('transactions.index', compact('transactions'));
     }
 }
 
+?>

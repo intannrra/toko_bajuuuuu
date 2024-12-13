@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     AuthController,
     TransactionController,
     ProfilController,
+    CartController,
 };
 use App\Http\Middleware\RoleMiddleware;
 
@@ -68,3 +69,13 @@ Route::middleware([RoleMiddleware:: class . ':User'])->group(function () {
     Route::delete('/profil/{id}', [ProfilController::class, 'destroy'])->name('profil.destroy');
     Route::get('/profil/{id}/edit', [ProfilController::class, 'edit'])->name('profil.edit');
 });
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+Route::post('/checkout', [TransactionController::class, 'checkout'])->name('cart.checkout');
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+

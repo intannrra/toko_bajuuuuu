@@ -9,12 +9,14 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'address',             // Alamat pengiriman
-        'shipping_service',    // Jasa pengiriman
-        'payment_method',      // Metode pembayaran
-        'payment_proof',       // Bukti pembayaran (path file)
-        'status',              // Status transaksi (misalnya pending, completed, canceled)
-        'total_price',
+        'address_id', 'shipping_method', 'payment_method', 'total_amount'
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'transaction_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }
 
