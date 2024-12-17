@@ -59,4 +59,5 @@ class CartController extends Controller
         session()->forget('cart');
         return redirect('/')->with('success', 'Checkout berhasil. Terima kasih telah berbelanja!');
     }
+    
 }
