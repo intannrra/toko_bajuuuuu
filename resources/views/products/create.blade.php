@@ -69,19 +69,19 @@
     <!-- Sidebar -->
     <div id="sidebar">
       <nav class="nav flex-column">
-        <a class="nav-link" href="dashboard">
+        <a class="nav-link" href="{{ route('dashboard.index') }}">
           <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
-        <a class="nav-link" href="/home">
+        <a class="nav-link" href="{{ route('homes.home') }}">
           <i class="fas fa-home"></i> Beranda
         </a>
-        <a class="nav-link" href="products">
+        <a class="nav-link" href="{{ route('products.index') }}">
           <i class="fas fa-box"></i> Produk
         </a>
-        <a class="nav-link" href="transactions">
+        <a class="nav-link" href="{{ route('transactions.index') }}">
           <i class="fas fa-money-check-alt"></i> Transaksi
         </a>
-        <a class="nav-link" href="logouts">
+        <a class="nav-link" href="{{ route('logout') }}">
           <i class="fas fa-sign-out-alt"></i> Logout
         </a>
       </nav>

@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     AuthController,
     TransactionController,
     ProfilController,
+    PaymentController,
     CartController,
 };
 
@@ -25,43 +26,41 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register.process');
 });
 
+// Rute untuk logout
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Route untuk fitur utama
+// Route untuk fitur utama yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
     Route::resource('/products', ProductController::class);
     Route::resource('/pesanans', PesananController::class);
     Route::resource('/transactions', TransactionController::class);
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    
+    // Route untuk Checkout
+    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.index'); // Menampilkan form checkout
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success'); // Halaman sukses checkout
 });
 
-// Route dengan RoleMiddleware
-Route::middleware([RoleMiddleware:: class . ':admin'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+// Route dengan RoleMiddleware untuk Admin
+Route::middleware([RoleMiddleware::class . ':admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
-Route::middleware([RoleMiddleware:: class . ':user'])->group(function () {
+// Route dengan RoleMiddleware untuk User
+Route::middleware([RoleMiddleware::class . ':user'])->group(function () {
     Route::get('/profil/{id}', [ProfilController::class, 'show'])->name('profil.show');
     Route::put('/profil/update/{id}', [ProfilController::class, 'update'])->name('profil.update');
     Route::delete('/profil/{id}', [ProfilController::class, 'destroy'])->name('profil.destroy');
     Route::get('/profil/{id}/edit', [ProfilController::class, 'edit'])->name('profil.edit');
 });
 
+// Route untuk Cart
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update');
-
-Route::post('/checkout', [TransactionController::class, 'checkout'])->name('cart.checkout');
-Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-
-// Route untuk halaman checkout
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('trans.checkout');
-Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.process');
-Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // Proses checkout dari keranjang
 
 // Route untuk transaksi
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
-Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.index');
+Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
