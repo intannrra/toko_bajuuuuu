@@ -59,7 +59,17 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // Proses checkout dari keranjang
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+Route::post('/checkout', [TransactionController::class, 'checkout'])->name('cart.checkout');
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+
+// Route untuk halaman checkout
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('trans.checkout');
+Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.process');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
 // Route untuk transaksi
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
