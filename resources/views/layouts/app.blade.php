@@ -64,7 +64,7 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="dashboard">Dashboard</a></li>
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/home">Beranda</a></li>
-            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Produk</a></li>
+            <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="product">Produk</a></li>
             <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="pesanans">Pesanan</a></li>
 
             @guest

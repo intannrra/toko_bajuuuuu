@@ -228,7 +228,7 @@
         }
 
         function checkout() {
-            window.location.href = "{{ route('trans.checkout') }}";
+            window.location.href = "{{ route('cart.index') }}";
         }
     </script>
 </body>

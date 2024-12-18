@@ -22,7 +22,7 @@ class RoleMiddleware
         else{
             if (!Auth::check()){
 
-                return redirect()->route('login');
+                return redirect()->route('auth.login');
             }
             return redirect()->back()->with('error','Anda Tidak Memiliki Akses');
         }
