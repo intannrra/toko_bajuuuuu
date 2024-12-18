@@ -21,6 +21,8 @@ class User extends Authenticatable
         'email',       // Email pengguna
         'password',    // Password
         'role',        // Role (admin/user)
+        'phone_number', // Nomor telepon
+        'address',     // Alamat pengguna
     ];
 
     /**

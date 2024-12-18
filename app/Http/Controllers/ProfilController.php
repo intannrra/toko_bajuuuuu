@@ -32,6 +32,7 @@ class ProfilController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'phone_number' => 'nullable|string|max:15',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'address' => 'nullable|string|max:255', // validasi input alamat
         ]);
 
         $user = new User();
@@ -47,6 +48,8 @@ class ProfilController extends Controller
 
         // Menyimpan nomor handphone jika ada
         $user->phone_number = $request->input('phone_number');
+        $user->address = $request->input('address'); // menyimpan alamat
+
         $user->save();
 
         return redirect()->route('profil.index')->with('success', 'Pengguna berhasil ditambahkan!');
@@ -82,6 +85,7 @@ class ProfilController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'phone_number' => 'nullable|string|max:15',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'address' => 'nullable|string|max:255', // validasi input alamat
         ]);
 
         // Update nama dan email
@@ -107,6 +111,10 @@ class ProfilController extends Controller
 
         // Menyimpan nomor handphone baru jika ada
         $user->phone_number = $request->input('phone_number');
+
+        // Menyimpan alamat jika ada
+        $user->address = $request->input('address');
+
         $user->save();
 
         return redirect()->route('profil.show', ['id' => $id])->with('success', 'Profil berhasil diperbarui!');
