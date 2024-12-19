@@ -90,18 +90,6 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="text-white text-center py-4">
-        <div class="container">
-            <p>&copy; 2024 Toko Baju Hj. Mariam - All Rights Reserved.</p>
-            <p>Follow us on:
-                <a href="#" class="text-light ml-2"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-light ml-2"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-light ml-2"><i class="fab fa-twitter"></i></a>
-            </p>
-        </div>
-    </footer>
-
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
