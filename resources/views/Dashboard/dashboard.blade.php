@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <!-- Link Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -49,6 +48,23 @@
     h1 {
       color: #333;
     }
+
+    .table-container {
+      margin-top: 30px;
+    }
+    
+    .card {
+      margin-bottom: 30px;
+    }
+
+    .card-header {
+      background-color: #2c3e50;
+      color: white;
+    }
+
+    .card-body {
+      background-color: #ecf0f1;
+    }
   </style>
 </head>
 <body>
@@ -79,20 +95,64 @@
       <h1>Selamat Datang di Dashboard Admin</h1>
       <p>This is your main dashboard content. You can add charts, data tables, or any other information here.</p>
 
-      <!-- Canvas untuk Grafik -->
-      <div>
-        <canvas id="transaksiChart" width="400" height="200"></canvas>
+      <!-- Grafik Transaksi -->
+      <div class="card">
+        <div class="card-header">
+          Grafik Jumlah Transaksi
+        </div>
+        <div class="card-body">
+          <canvas id="transaksiChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Tabel Transaksi -->
+      <div class="table-container">
+        <div class="card">
+          <div class="card-header">
+            Daftar Transaksi
+          </div>
+          <div class="card-body">
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>ID Transaksi</th>
+                  <th>Tanggal</th>
+                  <th>Total Transaksi</th>
+                  <th>Status</th>
+                  <th>Nama Pengguna</th>
+                  <th>Produk</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($transactions as $transaction)
+                <tr>
+                  <td>{{ $transaction->id }}</td>
+                  <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y') }}</td>
+                  <td>{{ number_format($transaction->total_price, 2) }}</td>
+                  <td>{{ $transaction->status }}</td>
+                  <td>{{ $transaction->user->name }}</td>
+                  <td>
+                    @foreach($transaction->products as $product)
+                      <p>{{ $product->name }} ({{ $product->pivot->quantity }} x {{ number_format($product->pivot->price, 2) }})</p>
+                    @endforeach
+                  </td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Script untuk Grafik Chart.js -->
   <script>
-    var data = @json($data); // Data transaksi yang diambil dari controller
-
     // Memproses data untuk Chart.js
-    var tanggal = data.map(item => item.tanggal);
-    var totalTransaksi = data.map(item => item.total_transaksi);
+    var data = @json($transactions);
+
+    var tanggal = data.map(item => item.created_at);
+    var totalTransaksi = data.map(item => item.total_price);
 
     var ctx = document.getElementById('transaksiChart').getContext('2d');
     var transaksiChart = new Chart(ctx, {
