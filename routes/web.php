@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     ProfilController,
     PaymentController,
     CartController,
+    MidtransController,
 };
 
 // Route untuk halaman home
@@ -37,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     
     // Route untuk Checkout
     Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.index'); // Menampilkan form checkout
-    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success'); // Halaman sukses checkout
 });
 
@@ -75,3 +76,12 @@ Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('c
 // Route untuk transaksi
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+
+Route::post('/midtrans-webhook', [PaymentController::class, 'handleWebhook']);
+Route::get('/payment', [MidtransController::class, 'getToken']);
+Route::post('/payment/callback', [MidtransController::class, 'callback']);
+// Untuk mendapatkan Snap Token
+Route::post('/payment/get-token', [MidtransController::class, 'getToken']);
+
+// Untuk menerima callback dari Midtrans
+Route::post('/payment/callback', [MidtransController::class, 'callback']);

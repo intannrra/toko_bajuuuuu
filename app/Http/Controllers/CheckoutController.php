@@ -2,115 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Midtrans\Snap;
 use Midtrans\Config;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
-    /**
-     * Menampilkan form checkout.
-     */
-    public function showCheckoutForm()
+    public function __construct()
     {
-        return view('trans.checkout'); // Pastikan view 'trans.checkout' sudah ada
+        // Set Midtrans config
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$clientKey = env('MIDTRANS_CLIENT_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PROD');
+        Config::$isSanitized = true;
+        Config::$isProduction = env('MIDTRANS_IS_PROD', false);
+
     }
 
-    /**
-     * Memproses data form checkout dan menghubungkan ke Midtrans.
-     */
+    public function index()
+    {
+        return view('checkout');  // Halaman form checkout
+    }
+
     public function process(Request $request)
     {
-        // Validasi input form
-        $validated = $request->validate([
-            'address' => 'required|string',
-            'shipping_service' => 'required|string',
-            'payment_method' => 'required|string',
-        ]);
-
-        // Konfigurasi Midtrans
-        Config::$serverKey = config('SB-Mid-server-C3ThxrhGLPRpmhcy-RvwD8Eg');
-        Config::$isProduction = config('midtrans.is_production', false);
-        Config::$isSanitized = config('midtrans.is_sanitized', true);
-        Config::$is3ds = config('midtrans.is_3ds', true);
-
-        // Data untuk transaksi Midtrans
-        $transactionDetails = [
-            'order_id' => 'ORDER-' . strtoupper(uniqid()),
-            'gross_amount' => $this->calculateTotalAmount($request),
+        // Data transaksi
+        $transaction_details = [
+            'order_id' => uniqid(),  // Membuat order_id unik
+            'gross_amount' => $request->total,  // Total transaksi dari form
         ];
 
-        $itemDetails = $this->getItemDetails($request);
-
-        $customerDetails = [
-            'first_name' => Auth::check() ? Auth::user()->name : 'Guest',
-            'email' => Auth::check() ? Auth::user()->email : 'guest@example.com',
-            'phone' => $request->phone ?? '08123456789',
-            'address' => $validated['address'],
+        // Rincian produk yang dibeli
+        $item_details = [
+            [
+                'id' => 'item1',
+                'price' => $request->total,
+                'quantity' => 1,
+                'name' => "Sample Product",
+            ],
         ];
 
-        $midtransParams = [
-            'transaction_details' => $transactionDetails,
-            'item_details' => $itemDetails,
-            'customer_details' => $customerDetails,
+        // Data pelanggan yang mengisi form checkout
+        $customer_details = [
+            'first_name'    => $request->first_name,
+            'last_name'     => $request->last_name,
+            'email'         => $request->email,
+            'phone'         => $request->phone,
+        ];
+
+        // Data transaksi lengkap
+        $transaction_data = [
+            'payment_type'     => 'credit_card',  // Tipe pembayaran (misalnya, kartu kredit)
+            'transaction_details' => $transaction_details,
+            'item_details'      => $item_details,
+            'customer_details'  => $customer_details,
         ];
 
         try {
-            // Buat token pembayaran menggunakan Midtrans Snap
-            $snapToken = Snap::getSnapToken($midtransParams);
+            // Mengambil Snap token dari Midtrans
+            $snapToken = Snap::getSnapToken($transaction_data);
 
-            // Simpan data ke session untuk ditampilkan nanti
-            session(['snap_token' => $snapToken, 'transaction_details' => $transactionDetails]);
-
-            // Redirect ke halaman sukses untuk menampilkan Snap Token
-            return redirect()->route('checkout.success');
+            // Mengembalikan Snap token dalam format JSON
+            return response()->json(['snap_token' => $snapToken]);
         } catch (\Exception $e) {
-            // Log error dan tampilkan pesan ke pengguna
-            Log::error('Midtrans error: ' . $e->getMessage());
-            return back()->withErrors('Terjadi kesalahan saat membuat transaksi: ' . $e->getMessage());
+            // Menangani error jika gagal
+            return response()->json(['error' => $e->getMessage()]);
         }
     }
 
-    /**
-     * Menampilkan halaman sukses setelah checkout.
-     */
-    public function success()
+    public function success(Request $request)
     {
-        // Ambil data transaksi dari session
-        $snapToken = session('snap_token');
-        $transactionDetails = session('transaction_details');
-
-        if (!$snapToken || !$transactionDetails) {
-            return redirect()->route('checkout')->withErrors('Data transaksi tidak ditemukan.');
-        }
-
-        return view('transactions.index', compact('snapToken', 'transactionDetails'));
-    }
-
-    /**
-     * Menghitung total harga transaksi.
-     */
-    private function calculateTotalAmount(Request $request)
-    {
-        // Contoh: Ambil total dari database atau hitung dari data yang dikirim
-        return 100000; // Ubah dengan logika perhitungan total
-    }
-
-    /**
-     * Mendapatkan detail item untuk transaksi.
-     */
-    private function getItemDetails(Request $request)
-    {
-        // Contoh: Data barang dari keranjang
-        return [
-            [
-                'id' => 'item1',
-                'price' => 100000, // Harga item
-                'quantity' => 1,
-                'name' => 'Sample Item',
-            ],
-        ];
+        // Halaman sukses setelah pembayaran berhasil
+        return view('checkout-success', ['order_id' => $request->order_id]);
     }
 }
