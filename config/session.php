@@ -215,4 +215,10 @@ return [
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
 
+    'midtrans' => [
+    'server_key' => env('MIDTRANS_SERVER_KEY'),
+    'client_key' => env('MIDTRANS_CLIENT_KEY'),
+    'environment' => env('MIDTRANS_ENVIRONMENT'),
+],
+
 ];

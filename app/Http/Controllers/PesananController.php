@@ -14,11 +14,9 @@ class PesananController extends Controller
         // Mengambil semua produk dari model Product
         $products = Product::all();
 
-        // Mengambil semua pesanan untuk ditampilkan
-        $pesanans = Pesanan::all();
 
         // Mengirim data produk dan pesanan ke view 'pesanan'
-        return view('pesanans.index', compact('products', 'pesanans'));
+        return view('pesanans.index', compact('products'));
     }
 
     // Fungsi untuk menambahkan produk ke dalam pesanan
