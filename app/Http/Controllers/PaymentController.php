@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Midtrans\Notification;
-use Midtrans\Config;
 use Midtrans\Snap;
+use Midtrans\Config;
+use Midtrans\Notification;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+    public function index($transaction_id)
+    {
+        // Mengambil data transaksi berdasarkan ID
+        $transaction = Transaction::with('details.product')->findOrFail($transaction_id);
+
+        // Mengirim data ke view
+        return view('payment.index', compact('transaction'));
+    }
     public function __construct()
     {
         // Set konfigurasi Midtrans
