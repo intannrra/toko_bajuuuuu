@@ -41,8 +41,14 @@ class CartController extends Controller
 
         // Mencari keranjang berdasarkan user dan produk, atau membuat entri baru jika belum ada
         $cart = Cart::firstOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $product->id],
-            ['price' => $product->price]
+            [
+                'user_id' => Auth::id(),
+                'product_id' => $product->id,
+            ],
+            [
+                'quantity' => 1,
+                'price' => $product->price,
+            ]
         );
 
         // Menambah jumlah produk dalam keranjang
@@ -69,58 +75,97 @@ class CartController extends Controller
     }
 
     // Proses checkout
+
     public function checkout(Request $request)
     {
-        // Validasi input
+        // Validasi data input
         $request->validate([
-            'address' => 'required|string|max:255',
+            'address' => 'required|string',
             'shipping_option' => 'required|string',
-            'payment_method' => 'required|string',
+            'payment_method' => 'required|string|in:transfer,e-wallet',
         ]);
 
-        // Mengambil semua item dalam keranjang
-        $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
-
-        // Memeriksa apakah keranjang kosong
+        $user = Auth::user();
+        $cartItems = Cart::where('user_id', $user->id)->get();
         if ($cartItems->isEmpty()) {
-            return redirect()->route('cart.index')->withErrors('Keranjang belanja Anda kosong.');
+            return redirect()->back()->withErrors('Keranjang belanja Anda kosong.');
         }
 
-        DB::beginTransaction();
-        try {
-            // Membuat transaksi baru
-            $transaction = Transaction::create([
-                'user_id' => Auth::id(),
-                'address' => $request->address,
-                'total_price' => $cartItems->sum(fn($item) => $item->product->price * $item->quantity),
-                'payment_method' => $request->payment_method,
-                'status' => 'pending',
-                'shipping_option' => $request->shipping_option,
+        // Hitung total harga
+        $totalPrice = $cartItems->sum(function ($item) {
+            return $item->quantity * $item->product->price;
+        });
+
+        // Simpan transaksi
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'address' => $request->address,
+            'total_price' => $totalPrice,
+            'payment_method' => $request->payment_method,
+            'status' => 'pending',
+            'shipping_option' => $request->shipping_option,
+            'message' => $request->message,
+        ]);
+
+        // Simpan detail transaksi
+        foreach ($cartItems as $item) {
+            TransactionDetail::create([
+                'transaction_id' => $transaction->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
             ]);
-
-            // Menambahkan detail transaksi untuk setiap item dalam keranjang
-            foreach ($cartItems as $item) {
-                TransactionDetail::create([
-                    'transaction_id' => $transaction->id,
-                    'product_id' => $item->product_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->product->price * $item->quantity,
-                ]);
-            }
-
-            // Menghapus semua item dalam keranjang setelah checkout
-            Cart::where('user_id', Auth::id())->delete();
-
-            DB::commit();
-
-            // Redirect ke halaman pembayaran dengan ID transaksi
-            return redirect()->route('payment.index', ['transaction_id' => $transaction->id])
-                ->with('success', 'Checkout berhasil. Pesanan Anda telah dibuat!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->withErrors('Terjadi kesalahan saat memproses checkout.');
         }
+
+        // Konfigurasi Midtrans
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // Data untuk Snap Midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id' => $transaction->id,
+                'gross_amount' => $totalPrice,
+            ],
+            'customer_details' => [
+                'first_name' => $user->name,
+                'email' => $user->email,
+            ],
+            'item_details' => $cartItems->map(function ($item) {
+                return [
+                    'id' => $item->product_id,
+                    'price' => $item->product->price,
+                    'quantity' => $item->quantity,
+                    'name' => $item->product->title,
+                ];
+            })->toArray(),
+        ];
+
+        // Pilihan pembayaran
+        if ($request->payment_method === 'transfer') {
+            $params['enabled_payments'] = ['bank_transfer'];
+        } elseif ($request->payment_method === 'e-wallet') {
+            $params['enabled_payments'] = ['gopay', 'shopeepay'];
+        }
+
+        // Generate Snap token
+        $snapToken = Snap::getSnapToken($params);
+
+        // Hapus keranjang setelah checkout
+        Cart::where('user_id', $user->id)->delete();
+        $transactionId = $transaction->id;
+        // Redirect ke halaman Midtrans
+        return view('payment.index', compact('snapToken','transactionId'));
     }
+    public function paymentSuccess($transactionId)
+    {
+        $transaction = Transaction::with('details.product')->findOrFail($transactionId);
+
+        return view('payment.success', compact('transaction'));
+    }
+
 
     // Membuat pembayaran dengan Midtrans
     public function createPayment(Request $request)

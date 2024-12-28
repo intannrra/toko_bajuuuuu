@@ -16,6 +16,9 @@ use App\Http\Controllers\{
     MidtransController,
 };
 
+Route::get('/', function(){
+    return redirect()->route('homes.home'); 
+});
 // Route untuk halaman home
 Route::get('/home', [HomeController::class, 'index'])->name('homes.home');
 
@@ -64,14 +67,14 @@ Route::get('/cart/update', [CartController::class, 'update'])->name('cart.update
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout'); // Proses checkout dari keranjang
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 
-Route::post('/checkout', [TransactionController::class, 'checkout'])->name('cart.checkout');
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
 // Route untuk halaman checkout
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('cart.index');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.process');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-
+Route::get('/payment/{transaction_id}', [PaymentController::class, 'index'])->name('payment.index');
+Route::get('/payment/success/{transactionId}', [CartController::class, 'paymentSuccess'])->name('payment.success');
 
 // Route untuk transaksi
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
