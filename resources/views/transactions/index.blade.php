@@ -2,20 +2,28 @@
 
 @section('content')
 <div class="container">
-    <h1>Daftar Transaksi</h1>
+    <h1 class="mb-4">Daftar Transaksi</h1>
+
+    <a href="{{ route('dashboard') }}" class="btn btn-primary mb-4">
+        <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+    </a>
 
     @foreach($transactions as $transaction)
         <div class="card mb-4">
+            <div class="card-header">
+                <strong>Transaksi #{{ $transaction->id }}</strong>
+            </div>
             <div class="card-body">
-                <h5>Transaksi #{{ $transaction->id }}</h5>
-                <p>Alamat: {{ $transaction->address }}</p>
-                <p>Metode Pengiriman: {{ $transaction->shipping_method }}</p>
-                <p>Metode Pembayaran: {{ $transaction->payment_method }}</p>
-                <p>Total Harga: Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</p>
-                <h6>Detail Item:</h6>
+                <p><strong>Alamat:</strong> {{ $transaction->address }}</p>
+                <p><strong>Metode Pengiriman:</strong> {{ $transaction->shipping_option }}</p>
+                <p><strong>Metode Pembayaran:</strong> {{ $transaction->payment_method }}</p>
+                <p><strong>Total Harga:</strong> Rp {{ number_format($transaction->total_price, 0, ',', '.') }}</p>
+                <p><strong>Status:</strong> {{ ucfirst($transaction->status) }}</p>
+
+                <h6 class="mt-3"><strong>Detail Item:</strong></h6>
                 <ul>
-                    @foreach($transaction->items as $item)
-                        <li>{{ $item->product_title }} - {{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</li>
+                    @foreach($transaction->products as $product)
+                        <li>{{ $product->title }} - {{ $product->pivot->quantity }} x Rp {{ number_format($product->pivot->price, 0, ',', '.') }}</li>
                     @endforeach
                 </ul>
             </div>

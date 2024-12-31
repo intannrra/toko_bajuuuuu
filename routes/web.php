@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
 // Route dengan RoleMiddleware untuk Admin
 Route::middleware([RoleMiddleware::class . ':admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 // Route dengan RoleMiddleware untuk User
