@@ -6,6 +6,20 @@
             <!-- Keranjang Belanja -->
             <div class="col-md-8">
                 <h3 class="mb-4"><strong>Keranjang Belanja</strong></h3>
+
+                <!-- Flash Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <table class="table align-middle">
                     <thead>
                         <tr>
@@ -20,13 +34,13 @@
                             <tr>
                                 <!-- Kolom Gambar & Produk -->
                                 <td>
-                                    <img src="{{ asset('storage/products/' . $item->product->image) }}"
-                                        alt="{{ $item->product->title }}" width="50" class="rounded">
+                                    <img src="{{ asset('storage/products/' . $item['product']->image) }}"
+                                        alt="{{ $item['product']->title }}" width="50" class="rounded">
                                 </td>
 
                                 <!-- Kolom Harga -->
                                 <td>
-                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
+                                    Rp {{ number_format($item['product']->price, 0, ',', '.') }}
                                 </td>
 
                                 <!-- Kolom Jumlah dengan tombol + dan - -->
@@ -34,11 +48,11 @@
                                     <div class="input-group" style="width: 120px;">
                                         <button class="btn btn-outline-secondary btn-sm" type="button"
                                             onclick="updateQuantity({{ $id }}, -1)">-</button>
-                                            <input type="text" id="quantity-{{ $id }}" 
-                                            value="{{ $item->quantity }}" 
-                                            class="form-control text-center" 
-                                            readonly 
-                                            data-max-stock="{{ $item->product->stock }}">
+                                        <input type="text" id="quantity-{{ $id }}"
+                                            value="{{ $item['quantity'] }}"
+                                            class="form-control text-center"
+                                            readonly
+                                            data-max-stock="{{ $item['product']->stock }}">
                                         <button class="btn btn-outline-secondary btn-sm" type="button"
                                             onclick="updateQuantity({{ $id }}, 1)">+</button>
                                     </div>
@@ -46,7 +60,7 @@
 
                                 <!-- Kolom Subtotal -->
                                 <td id="subtotal-{{ $id }}">
-                                    Rp {{ number_format($item->price, 0, ',', '.') }}
+                                    Rp {{ number_format($item['price'], 0, ',', '.') }}
                                 </td>
                             </tr>
                         @endforeach
@@ -61,7 +75,7 @@
 
                 <!-- Total Pembayaran -->
                 <div class="text-end bg-light p-3 rounded">
-                    <h4><strong>Total Pembayaran:</strong> <span id="totalPrice">Rp {{ number_format($totalPrice) }}</span>
+                    <h4><strong>Total Pembayaran:</strong> <span id="totalPrice">Rp {{ number_format($totalPrice, 0, ',', '.') }}</span>
                     </h4>
                 </div>
 
@@ -113,6 +127,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function updateQuantity(id, change) {
             const input = document.getElementById(`quantity-${id}`);
