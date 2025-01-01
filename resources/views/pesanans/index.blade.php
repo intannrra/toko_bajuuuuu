@@ -114,17 +114,14 @@
                 <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="/home">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link" href="pesanans">Produk</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Pesanan</a></li>
 
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('auth.login') }}">Log In</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('auth.register') }}">Register</a></li>
                 @else
+                    <li class="nav-item"><a class="nav-link" href="{{ route('profil.show', Auth::id()) }}">Profile</a></li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                           Logout
-                        </a>
+                        <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     </li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf

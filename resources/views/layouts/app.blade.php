@@ -11,41 +11,46 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <style>
-        .navbar {
-            background-color: #5A9EC1;
-        }
-        .navbar-brand, .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: bold;
-        }
-        .navbar-brand:hover, .navbar-nav .nav-link:hover {
-            color: #F8C471 !important;
-            text-decoration: underline;
-        }
-        .navbar-toggler-icon {
-            color: #ffffff;
-        }
-        main {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-        footer {
-            background-color: #2C3E50;
-        }
-        footer p {
-            margin: 0;
-        }
-        .btn-primary-custom {
-            background-color: #5A9EC1;
-            color: #ffffff;
-            border: none;
-            transition: all 0.3s ease;
-        }
-        .btn-primary-custom:hover {
-            background-color: #4B7C99;
-            transform: scale(1.05);
-        }
-    </style>
+    .navbar {
+        background-color: #5A9EC1;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1030; /* Agar navbar berada di atas elemen lain */
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+        color: #ffffff !important;
+        font-weight: bold;
+    }
+    .navbar-brand:hover, .navbar-nav .nav-link:hover {
+        color: #F8C471 !important;
+        text-decoration: underline;
+    }
+    .navbar-toggler-icon {
+        color: #ffffff;
+    }
+    main {
+        padding-top: 80px; /* Sesuaikan dengan tinggi navbar */
+        padding-bottom: 40px;
+    }
+    footer {
+        background-color: #2C3E50;
+    }
+    footer p {
+        margin: 0;
+    }
+    .btn-primary-custom {
+        background-color: #5A9EC1;
+        color: #ffffff;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    .btn-primary-custom:hover {
+        background-color: #4B7C99;
+        transform: scale(1.05);
+    }
+</style>
+
 </head>
 <body>
     <!-- Navbar -->
@@ -60,8 +65,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="/home">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link" href="/products">Produk</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pesanans">Pesanan</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pesanans">Produk</a></li>
 
                 @guest
                     <li class="nav-item"><a class="nav-link" href="{{ route('auth.login') }}">Log In</a></li>
