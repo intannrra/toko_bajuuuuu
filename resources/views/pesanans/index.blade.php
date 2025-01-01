@@ -14,6 +14,10 @@
         /* Navbar styling */
         .navbar {
             background-color: #5A9EC1;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
         }
         .navbar-brand, .navbar-nav .nav-link {
             color: #ffffff !important;
@@ -21,6 +25,9 @@
         }
         .navbar-brand:hover, .navbar-nav .nav-link:hover {
             color: #F8C471 !important;
+        }
+        .navbar-toggler-icon {
+        color: #ffffff;
         }
 
         /* Additional product card and cart styling */
@@ -158,7 +165,7 @@
                             <h5 class="mt-2">{{ $product->title }}</h5>
                             <p class="text-muted">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                             <button class="btn btn-dark" onclick="addToCart('{{ $product->id }}', '{{ $product->title }}', '{{ $product->price }}')">
-                                <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                                <i class="fas fa-cart-plus"></i>
                             </button>
                         </div>
                     </div>
