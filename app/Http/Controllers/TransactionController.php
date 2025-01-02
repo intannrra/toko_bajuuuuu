@@ -42,4 +42,15 @@ class TransactionController extends Controller
 
         return view('transactions.index', compact('transactions'));
     }
+
+    public function tpk()
+    {
+        // Ambil data transaksi yang sama seperti di halaman index
+    $transactions = Transaction::with('products')->get();
+
+        // Kirim data transaksi ke view
+        return view('transactions.tpk', compact('transactions'));
+    }
+
+
 }

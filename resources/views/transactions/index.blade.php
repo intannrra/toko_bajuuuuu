@@ -2,7 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Daftar Transaksi</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Daftar Transaksi</h1>
+        <a href="{{ route('transactions.tpk') }}" class="btn btn-success">
+            <i class="fas fa-calculator"></i> Hitung TPK
+        </a>
+    </div>
 
     <a href="{{ route('dashboard') }}" class="btn btn-primary mb-4">
         <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
@@ -31,3 +36,4 @@
     @endforeach
 </div>
 @endsection
+

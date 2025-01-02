@@ -19,16 +19,17 @@ class TransactionDetail extends Model
     /**
      * Relasi ke model Transaction
      */
-    public function transaction()
+    public function transactions()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsToMany(Transaction::class)->withPivot('quantity', 'price');
     }
 
-    /**
-     * Relasi ke model Product
-     */
-    public function product()
+        /**
+         * Relasi ke model Product
+         */
+        public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('quantity', 'price');
     }
+
 }

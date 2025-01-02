@@ -17,7 +17,7 @@ use App\Http\Controllers\{
 };
 
 Route::get('/', function(){
-    return redirect()->route('homes.home'); 
+    return redirect()->route('homes.home');
 });
 // Route untuk halaman home
 Route::get('/home', [HomeController::class, 'index'])->name('homes.home');
@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/products', ProductController::class);
     Route::resource('/pesanans', PesananController::class);
     Route::resource('/transactions', TransactionController::class);
-    
+
     // Route untuk Checkout
     Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.index'); // Menampilkan form checkout
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process'); // Memproses checkout
@@ -80,6 +80,10 @@ Route::get('/payment/success/{transactionId}', [CartController::class, 'paymentS
 // Route untuk transaksi
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+Route::get('/tpk', function () {
+    return view('transactions.tpk');
+})->name('transactions.tpk');
+Route::get('/tpk', [TransactionController::class, 'tpk'])->name('transactions.tpk');
 
 Route::post('/midtrans-webhook', [PaymentController::class, 'handleWebhook']);
 Route::get('/payment', [MidtransController::class, 'getToken']);

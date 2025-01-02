@@ -8,7 +8,6 @@
     <!-- Stylesheets -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
         /* Navbar styling */
@@ -135,23 +134,21 @@
                     </form>
                 @endguest
 
-                <!-- Cart Toggle Button -->
-                <li class="nav-item">
-                    <button class="cart-toggle-btn" id="cart-toggle">
+                <!-- Cart Icon with Badge -->
+                <li class="nav-item dropdown ml-3">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarCart" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count" id="cart-count">0</span>
-                    </button>
+                        <span class="badge badge-light" id="cart-count">0</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarCart">
+                        <div id="cart-items-dropdown"></div>
+                        <div class="dropdown-divider"></div>
+                        <button class="btn btn-success btn-block" onclick="checkout()">Checkout</button>
+                    </div>
                 </li>
             </ul>
         </div>
     </nav>
-
-    <!-- Cart Section -->
-    <div class="cart-container" id="cart-container">
-        <h5>Keranjang Belanja</h5>
-        <div id="cart-items"></div>
-        <button class="btn btn-success btn-block mt-3" onclick="checkout()">Checkout</button>
-    </div>
 
     <!-- Content Section -->
     <main>
@@ -164,9 +161,14 @@
                             <img src="{{ asset('storage/products/'.$product->image) }}" class="img-fluid" alt="{{ $product->title }}">
                             <h5 class="mt-2">{{ $product->title }}</h5>
                             <p class="text-muted">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <button class="btn btn-dark" onclick="addToCart('{{ $product->id }}', '{{ $product->title }}', '{{ $product->price }}')">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
+                            <form action="{{ route('cart.add') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="btn btn-dark">
+                                    <i class="fas fa-cart-plus"></i> Tambah Ke Keranjang
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @empty
@@ -175,7 +177,6 @@
                     </div>
                 @endforelse
             </div>
-        </div>
     </main>
 
     <!-- Footer -->
@@ -190,67 +191,55 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    let cart = [];
+        let cart = [];
 
-    function saveCartToLocalStorage() {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    function loadCartFromLocalStorage() {
-        const storedCart = localStorage.getItem('cart');
-        if (storedCart) {
-            cart = JSON.parse(storedCart);
+        function addToCart(id, title, price) {
+            const product = { id, title, price: parseInt(price) };
+            cart.push(product);
             renderCart();
         }
-    }
 
-    function addToCart(id, title, price) {
-        const product = { id, title, price: parseInt(price) };
-        cart.push(product);
-        saveCartToLocalStorage();
-        renderCart();
-    }
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartItemsDropdown = document.getElementById('cart-items-dropdown');
+            const totalPriceContainer = document.getElementById('total-price');
+            const cartCountContainer = document.getElementById('cart-count');
+            cartItemsContainer.innerHTML = '';
+            cartItemsDropdown.innerHTML = '';
+            let totalPrice = 0;
 
-    function removeFromCart(id) {
-        cart = cart.filter(item => item.id !== id);
-        saveCartToLocalStorage();
-        renderCart();
-    }
+            cart.forEach(item => {
+                totalPrice += item.price;
 
-    function renderCart() {
-        const cartItemsContainer = document.getElementById('cart-items');
-        const cartCount = document.getElementById('cart-count');
-        cartItemsContainer.innerHTML = '';
-        cart.forEach(item => {
-            cartItemsContainer.innerHTML += `
-                <div class="cart-item">
-                    <span>${item.title} - Rp ${item.price.toLocaleString()}</span>
-                    <button class="btn btn-danger btn-sm" onclick="removeFromCart('${item.id}')">Hapus</button>
-                </div>
-            `;
-        });
-        cartCount.textContent = cart.length;
-    }
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item">
+                        <span class="item-info">${item.title} - Rp ${item.price.toLocaleString()}</span>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.id})">Hapus</button>
+                    </div>
+                `;
 
-    function checkout() {
-        console.log('Checkout:', cart);
-        window.location.href = "{{ route('cart.index') }}";
-    }
+                cartItemsDropdown.innerHTML += `
+                    <div class="dropdown-item">
+                        <span class="item-info">${item.title} - Rp ${item.price.toLocaleString()}</span>
+                        <button class="btn btn-danger btn-sm float-right" onclick="removeFromCart(${item.id})">Hapus</button>
+                    </div>
+                `;
+            });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadCartFromLocalStorage();
+            totalPriceContainer.textContent = totalPrice.toLocaleString();
+            cartCountContainer.textContent = cart.length;
+        }
 
-        const cartToggle = document.getElementById('cart-toggle');
-        const cartContainer = document.getElementById('cart-container');
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+        }
 
-        cartToggle.addEventListener('click', () => {
-            if (cartContainer.style.display === 'none' || cartContainer.style.display === '') {
-                cartContainer.style.display = 'block';
-            } else {
-                cartContainer.style.display = 'none';
-            }
-        });
-    });
+        function checkout() {
+            window.location.href = "{{ route('cart.index') }}";
+        }
     </script>
 </body>
 </html>
+
+

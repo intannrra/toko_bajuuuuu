@@ -69,7 +69,7 @@
     <!-- Sidebar -->
     <div id="sidebar">
       <nav class="nav flex-column">
-        <a class="nav-link" href="{{ route('dashboard.index') }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
           <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
         <a class="nav-link" href="{{ route('homes.home') }}">
